@@ -19,7 +19,7 @@ class Charity(models.Model):
     # id = models.AutoField(primary_key = True)
     user = models.OneToOneField(User, primary_key = True, on_delete=models.CASCADE)
     name = models.CharField(max_length = 50)
-    reg_name = models.CharField(max_length = 10)
+    reg_number = models.CharField(max_length = 10, default = '')
 
 
 class Task(models.Model):
@@ -36,7 +36,7 @@ class Task(models.Model):
     ]
 
     # id = models.AutoField(null=False)
-    assigned_benefactor = models.ForeignKey(Benefactor, on_delete=models.CASCADE)
+    assigned_benefactor = models.ForeignKey(Benefactor, null = True, on_delete=models.CASCADE)
     charity = models.ForeignKey(Charity, on_delete = models.CASCADE)
     age_limit_from = models.IntegerField(blank = True, null = True)
     age_limit_to = models.IntegerField(blank = True, null = True)
