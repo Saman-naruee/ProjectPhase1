@@ -4,7 +4,17 @@
     <h2 class="text-center my-5">نیکوکاران و اعضای خیریه‌ها</h2>
     <div class="container">
         <div class="d-flex flex-wrap justify-content-around">
-            <div>نام کاربری افرادی که عضو هستند</div>
+            <ul class="list-inline text-center">
+                {% for user in users %}
+                    {% if user.first_name or user.last_name %}
+                        {% if forloop.first or user.get_full_name != previous_user.get_full_name %}
+                            <li class="list-inline-item">&nbsp;&nbsp;&nbsp;&nbsp;{{ user.get_full_name }}</li>
+                        {% endif %}
+                        {% with user as previous_user %}
+                        {% endwith %}
+                    {% endif %}
+                {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock %}
