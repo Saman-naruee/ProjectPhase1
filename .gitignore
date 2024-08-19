@@ -3,3 +3,9 @@ accounts/__pycache__
 charities/__pycache__
 charity/__pycache__
 db.sqlite3
+charities/migraions/
+
+**/__pycache__/
+*.pyc
+db.sqlite3
+**/migrations/*.pyc
