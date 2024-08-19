@@ -30,13 +30,47 @@ class Charity(models.Model):
 
 class TaskManager(models.Manager):
     def related_tasks_to_charity(self, user):
-        return self.none() if (Charity.DoesNotExist or not user) else self.filter(charity = Charity.objects.get(user=user))
+        try:
+            charity = Charity.objects.get(user=user)
+        except Charity.DoesNotExist:
+            return self.none()
+        return super().get_queryset().filter(charity=charity)
 
     def related_tasks_to_benefactor(self, user):
-        return self.none() if (Benefactor.DoesNotExist or not user) else self.filter(assigned_benefactor = Benefactor.objects.get(user=user))
+        try:
+            benefactor = Benefactor.objects.get(user=user)
+        except Benefactor.DoesNotExist:
+            return self.none()
+        return super().get_queryset().filter(assigned_benefactor=benefactor)
 
     def all_related_tasks_to_user(self, user):
-        return self.related_tasks_to_benefactor(user) and self.related_tasks_to_charity(user)
+        return self.related_tasks_to_charity(user) | self.related_tasks_to_benefactor(user)
+
+
+# Samira
+
+# class TaskManager(models.Manager):
+#     def related_tasks_to_charity(self, user):
+#         user_charity = list(Charity.objects.filter(user=user))
+#         if user_charity:
+#             return super().get_queryset().filter(charity=user_charity[0])
+#         return Charity.objects.none()
+
+#     def related_tasks_to_benefactor(self, user):
+#         user_benefactor = list(Benefactor.objects.filter(user=user))
+#         if user_benefactor :
+#             return super().get_queryset().filter(assigned_benefactor=user_benefactor[0])
+#         return Benefactor.objects.none()
+
+#     def all_related_tasks_to_user(self, user):
+#         user_charity = list(Charity.objects.filter(user=user))
+#         qs1 = super().get_queryset().filter(charity=user_charity[0])
+#         user_benefactor = list(Benefactor.objects.filter(user=user))
+#         qs2 = super().get_queryset().filter(assigned_benefactor=user_benefactor[0])
+#         qs3 = super().get_queryset().filter(state='P')
+#         return qs1 | qs2 | qs3
+
+
 
 class Task(models.Model):
     Gender_Choices = [
